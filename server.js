@@ -1,7 +1,7 @@
 const express = require("express");
 const app = express();
 const PORT = process.env.PORT || 3000;
-const pokemon = require("./models/pokemon");
+const pokemons = require("./models/pokemons");
 
 //Middleware
 const reactViewsEngine = require("jsx-view-engine").createEngine();
@@ -23,7 +23,11 @@ app.get("/", (req, res) => {
 });
 
 app.get("/pokemon", (req, res) => {
-  res.render("Index");
+  //   res.send(pokemons);
+  res.render("Index", {
+    // pokemons: pokemons
+    pokemons,
+  });
 });
 
 // Listen
