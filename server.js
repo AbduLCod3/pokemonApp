@@ -33,15 +33,9 @@ app.get("/pokemons", (req, res) => {
 
 // === Show ===
 app.get("/pokemons/:id", (req, res) => {
-  // res.render ("views/views")
-  res.send([req.params.id]);
-  // res.render("Show", {
-  //   // second param must be an object
-  //   fruit: fruits[req.params.id],
-  //   // there will be a variable available
-  //   //inside the jsx file called fruit.
-  //   // its value is fruits
-  //   //[req.params.indexOfArray]
+  res.render("Show", {
+    pokemon: pokemons[req.params.id],
+  });
 });
 
 // Listen
