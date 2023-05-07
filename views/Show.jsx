@@ -1,31 +1,9 @@
-// const React = require("react");
-// const Nav = require("./components/Nav");
-
-// class Show extends React.Component {
-//   render() {
-//     const pokemons = this.props.pokemons;
-//     return (
-//       <div>
-//         <Nav link="/pokemons" text="Home" />
-//         <h1> Show Page</h1>
-//         <br></br>
-//         <h1>WHATEVER</h1>
-//         {pokemons.name}
-//         {/* The {fruit.name} is {fruit.color} <br />
-//         {fruit.readyToEat ? "It is ready to eat" : "not ready"} */}
-//       </div>
-//     );
-//   }
-// }
-
-// module.exports = Show;
-
 const React = require("react");
 const Nav = require("./components/Nav");
 
 const myStyle = {
   color: "#ffffff",
-  backgroundColor: "#000000",
+  backgroundColor: "gray",
 };
 
 class Show extends React.Component {
@@ -33,8 +11,13 @@ class Show extends React.Component {
     const { pokemon } = this.props;
     return (
       <div style={myStyle}>
-        <h1>{pokemon.name.charAt(0).toUpperCase() + pokemon.name.slice(1)}</h1>
-        <p>Image: {pokemon.img}</p>
+        <h1>Gotta Catch 'Em All</h1>
+        <h2>{pokemon.name.charAt(0).toUpperCase() + pokemon.name.slice(1)}</h2>
+
+        <p>
+          {/* Image:{" "} */}
+          <a href={`${pokemon.img}.jpg`}>Pokemon Image</a>
+        </p>
 
         <Nav link="/pokemons" text="Go Back" />
       </div>
