@@ -1,41 +1,57 @@
+require("dotenv").config();
 const express = require("express");
 const app = express();
 const PORT = process.env.PORT || 3000;
-const pokemons = require("./models/pokemons");
+const { connect, connection } = require("mongoose");
+//const methodOverride = require("method-override");
+const pokemonsController = require("./controllers/pokemonsController");
 
-//Middleware
+// Database connection
+connect(process.env.MONGO_URI, {
+  // Having these two properties set to true is best practice when connecting to MongoDB
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+});
+// This line of code will run the function below once the connection to MongoDB has been established.
+connection.once("open", () => {
+  console.log("connected to mongo");
+});
+
+// View Engine Middleware Configure
 const reactViewsEngine = require("jsx-view-engine").createEngine();
 app.engine("jsx", reactViewsEngine);
-
-// this line tells the render method the default
-// file extension to look for
-// we set up veiw engine to jsx
+// This line tells the render method the default file extension to look for.
 app.set("view engine", "jsx");
-// this line sets the render method's default lcation to
-//look for a jsx file to render.
-// Withou this line of code we would have specifi
-// the views directory everytime we use the ender method
+// This line sets the render method's default location to look for a jsx file to render. Without this line of code we would have to specific the views directory everytime we use the render method
 app.set("views", "./views");
 
-// ====== I.N.D.U.C.E ======
-// === Index ===
-app.get("/", (req, res) => {
-  res.send("Welcome to the Pokemon App!");
+// Middleware
+app.use(express.urlencoded({ extended: false })); // This enables the req.body
+//after app has been defined
+//use methodOverride.  We'll be adding a query parameter to our delete form named _method
+//app.use(methodOverride("_method"));
+// this tells the server to look for
+// static assets in the public folder
+// like css, images,
+app.use(express.static("public"));
+
+// Custom Middleware
+app.use((req, res, next) => {
+  console.log("Middleware running...");
+  next();
 });
 
-app.get("/pokemons", (req, res) => {
-  //   res.send(pokemons);
-  res.render("Index", {
-    // pokemons: pokemons
-    pokemons,
-  });
-});
+// Routes
+app.use("/pokemons", pokemonsController);
 
-// === Show ===
-app.get("/pokemons/:id", (req, res) => {
-  res.render("Show", {
-    pokemon: pokemons[req.params.id],
-  });
+//Catch all route. If the uses try to reach a route that doesn't match the ones above it will catch them and redirect to the Index page
+app.get("/*", (req, res) => {
+  res.send(`
+    <div>
+      404 this page doesn't exist! <br />
+      <a href="/pokemons">Pokemons Page</a> <br />
+    </div
+  `);
 });
 
 // Listen
